@@ -1,7 +1,14 @@
 import { exit } from "../modules/exit.js";
 import { getOsInfo } from "../modules/os.js";
+import { DirController } from "../modules/dir.js";
+
+const dirController = new DirController();
 
 export const run = {
+  currentDir: () => console.log(`You are currently in ${dirController.getCurrentDir()}`),
+  up: () => dirController.upDir(),
+  cd: () => dirController.changeDir(),
+  ls: () => dirController.listDir(),
   cat: (args) => console.log("cat path_to_file\t|\tRead file and print it's content in console (should be done using Readable stream)"),
   add: (args) => console.log("add new_file_name\t|\tCreate empty file in current working directory"),
   rn: (args) => console.log("rn path_to_file new_filename\t|\tRename file"),

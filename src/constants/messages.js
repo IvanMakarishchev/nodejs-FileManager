@@ -26,6 +26,8 @@ export const messages = {
   availableCommand: (commands) => `Available commands: \n${commands}`,
   availableArgs: (arg) => `Available arguments:\n${arg}`,
   currentPath: (directoryPath) => `You are currently in ${directoryPath}`,
+  unknownDir: (dirName) => `Unknown directory name ${dirName}`,
+  alreadyInRoot: () => `Cannot go upper, you are in root directory!`,
   greet: () => `Welcome to the File Manager, ${username}!\n`,
   bye: () => `Thank you for using File Manager, ${username}, goodbye!\n`
 }
