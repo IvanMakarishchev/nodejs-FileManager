@@ -21,9 +21,10 @@ export const help = {
 
 export const messages = {
   unknownCommand: (command) => `Unknown command: "${command}"\n`,
-  unknownArgs: (arg) => `Unknown argument: "${arg}"`,
+  unknownArgs: (wrongArg) => `Unknown argument: "${wrongArg}"!`,
+  missedArgs: () => `Argument missed!`,
   availableCommand: (commands) => `Available commands: \n${commands}`,
-  availableArgs: (arg) => `Available arguments: ${arg}`,
+  availableArgs: (arg) => `Available arguments:\n${arg}`,
   currentPath: (directoryPath) => `You are currently in ${directoryPath}`,
   greet: () => `Welcome to the File Manager, ${username}!\n`,
   bye: () => `Thank you for using File Manager, ${username}, goodbye!\n`

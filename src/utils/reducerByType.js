@@ -1,5 +1,5 @@
-export const reducerByType = (arr, cb) =>
-  arr.reduce(
+export const reducerByType = (obj, cb) =>
+  Object.entries(obj).reduce(
     (acc, el) =>
       typeof el[1] === "string"
         ? cb(acc, el[1])
