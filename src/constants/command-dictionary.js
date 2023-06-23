@@ -1,15 +1,17 @@
 import { exit } from "../modules/exit.js";
 import { getOsInfo } from "../modules/os.js";
 import { DirController } from "../modules/dir.js";
+import { FileOperations } from "../modules/file.js";
 
 const dirController = new DirController();
+const fileOperations = new FileOperations();
 
 export const run = {
-  currentDir: () => console.log(`You are currently in ${dirController.getCurrentDir()}`),
+  currentDir: async () => console.log(`You are currently in ${dirController.getCurrentDir()}`),
   up: () => dirController.upDir(),
   cd: () => dirController.changeDir(),
   ls: () => dirController.listDir(),
-  cat: (args) => console.log("cat path_to_file\t|\tRead file and print it's content in console (should be done using Readable stream)"),
+  cat: () => fileOperations.openFile(dirController.getCurrentDir()),
   add: (args) => console.log("add new_file_name\t|\tCreate empty file in current working directory"),
   rn: (args) => console.log("rn path_to_file new_filename\t|\tRename file"),
   cp: (args) => console.log("cp path_to_file path_to_new_directory\t|\tCopy file"),

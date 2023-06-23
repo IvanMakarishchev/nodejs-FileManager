@@ -23,7 +23,7 @@ export const runCommand = async (command) => {
       : await run[command](args)
     : console.log(
         `${messages.unknownCommand(command)}${messages.availableCommand(
-          await reducerByType(help, (a, b) => a + b)
+          reducerByType(help, (a, b) => a + b)
         )}`
       );
 };
