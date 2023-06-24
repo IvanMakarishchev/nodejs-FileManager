@@ -8,6 +8,7 @@ import { run } from "../constants/command-dictionary.js";
 import { runCommand } from "../utils/runCommand.js";
 import { pipeline } from "stream/promises";
 import { createHash } from "crypto";
+import { createBrotliCompress, createBrotliDecompress } from "zlib";
 
 export class FileOperations {
   constructor() {}
@@ -54,7 +55,7 @@ export class FileOperations {
       return;
     }
     if (await isExists(`${currentDir}\\${destinationDir}\\${fileName}`)) {
-      console.log(`File with name ${fileName} already exists!`);
+      console.log(`File with name ${fileName} already ecrexists!`);
       return;
     }
     if (!(await isExists(`${currentDir}\\${destinationDir}`))) {
@@ -101,6 +102,42 @@ export class FileOperations {
     this.readStream(currentDir, fileName).then((data) =>
       console.log(createHash("sha256").update(data).digest("hex"))
     );
+  }
+  async compress(currentDir) {
+    const [fileName, destinationDir] = argController.getArgs();
+    if (!fileName || !destinationDir) {
+      console.log("Not enough arguments!");
+      return;
+    }
+    if (!(await isExists(`${currentDir}\\${fileName}`))) {
+      console.log("Target not exists!");
+      return;
+    }
+    if (await isExists(`${currentDir}\\${destinationDir}\\${fileName}.br`)) {
+      console.log(`File with name ${fileName} already exists!`);
+      return;
+    }
+    createReadStream(`${currentDir}\\${fileName}`, { encoding: "utf-8" })
+      .pipe(createBrotliCompress())
+      .pipe(createWriteStream(`${currentDir}\\${destinationDir}\\${fileName}.br`));
+  }
+  async decompress(currentDir) {
+    const [fileName, destinationDir] = argController.getArgs();
+    if (!fileName || !destinationDir) {
+      console.log("Not enough arguments!");
+      return;
+    }
+    if (!(await isExists(`${currentDir}\\${fileName}`))) {
+      console.log("Target not exists!");
+      return;
+    }
+    if (await isExists(`${currentDir}\\${destinationDir}\\${fileName.slice(0, -3)}`)) {
+      console.log(`File with name ${fileName} already exists!`);
+      return;
+    }
+    createReadStream(`${currentDir}\\${fileName}`)
+      .pipe(createBrotliDecompress())
+      .pipe(createWriteStream(`${currentDir}\\${destinationDir}\\${fileName.slice(0, -3)}`));
   }
   readStream(path, name) {
     const input = createReadStream(`${path}\\${name}`, { encoding: "utf-8" });
