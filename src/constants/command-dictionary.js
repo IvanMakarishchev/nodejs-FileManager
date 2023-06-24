@@ -24,7 +24,7 @@ export const run = {
     username: () => getOsInfo('username'),
     architecture: () => getOsInfo('architecture'),
   },
-  hash: (args) => console.log("hash path_to_file\t|\tCalculate hash for file"),
+  hash: () => fileOperations.calcHash(dirController.getCurrentDir()),
   compress: (args) => console.log("compress path_to_file path_to_destination\t|\tCompress file"),
   decompress: (args) => console.log("decompress path_to_file path_to_destination\t|\tDecompress file"),
   ".exit": () => exit()

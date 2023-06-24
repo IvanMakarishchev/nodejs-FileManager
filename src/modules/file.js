@@ -7,6 +7,7 @@ import * as readline from "readline/promises";
 import { run } from "../constants/command-dictionary.js";
 import { runCommand } from "../utils/runCommand.js";
 import { pipeline } from "stream/promises";
+import { createHash } from "crypto";
 
 export class FileOperations {
   constructor() {}
@@ -79,7 +80,9 @@ export class FileOperations {
       console.log(`File with name ${fileName} already exists!`);
       return;
     }
-    await this.copyFile(currentDir).then(() => rm(`${currentDir}\\${fileName}`));
+    await this.copyFile(currentDir).then(() =>
+      rm(`${currentDir}\\${fileName}`)
+    );
   }
   async deleteFile(currentDir) {
     const [fileName] = argController.getArgs();
@@ -88,6 +91,16 @@ export class FileOperations {
       return;
     }
     await rm(`${currentDir}\\${fileName}`);
+  }
+  async calcHash(currentDir) {
+    const [fileName] = argController.getArgs();
+    if (!(await isExists(`${currentDir}\\${fileName}`))) {
+      console.log("Target not exists!");
+      return;
+    }
+    this.readStream(currentDir, fileName).then((data) =>
+      console.log(createHash("sha256").update(data).digest("hex"))
+    );
   }
   readStream(path, name) {
     const input = createReadStream(`${path}\\${name}`, { encoding: "utf-8" });
