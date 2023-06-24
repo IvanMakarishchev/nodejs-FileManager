@@ -1,7 +1,7 @@
 import { isExists } from "../utils/isExists.js";
 import { argController } from "../utils/getArgs.js";
 import { createReadStream, createWriteStream } from "fs";
-import { writeFile, rename, mkdir } from "fs/promises";
+import { writeFile, rename, mkdir, unlink, rm } from "fs/promises";
 import { checkFile } from "../utils/checkFile.js";
 import * as readline from "readline/promises";
 import { run } from "../constants/command-dictionary.js";
@@ -36,16 +36,8 @@ export class FileOperations {
       console.log("Not enough arguments!");
       return;
     }
-    if (oldName === newName) {
-      console.log("You trying to rename a file with the same name!");
-      return;
-    }
     if (!(await isExists(`${currentDir}\\${oldName}`))) {
       console.log("Target not exists!");
-      return;
-    }
-    if (await isExists(`${currentDir}\\${newName}`)) {
-      console.log(`File with name ${newName} already exists!`);
       return;
     }
     if (await isExists(`${currentDir}\\${newName}`)) {
@@ -72,6 +64,22 @@ export class FileOperations {
     createReadStream(`${currentDir}\\${fileName}`).pipe(
       createWriteStream(`${currentDir}\\${destinationDir}\\${fileName}`)
     );
+  }
+  async moveFile(currentDir) {
+    const [fileName, destinationDir] = argController.getArgs();
+    if (!fileName || !destinationDir) {
+      console.log("Not enough arguments!");
+      return;
+    }
+    if (!(await isExists(`${currentDir}\\${fileName}`))) {
+      console.log("Target not exists!");
+      return;
+    }
+    if (await isExists(`${currentDir}\\${destinationDir}\\${fileName}`)) {
+      console.log(`File with name ${fileName} already exists!`);
+      return;
+    }
+    await this.copyFile(currentDir).then(() => rm(`${currentDir}\\${fileName}`));
   }
   readStream(path, name) {
     const input = createReadStream(`${path}\\${name}`, { encoding: "utf-8" });

@@ -15,7 +15,7 @@ export const run = {
   add: () => fileOperations.createFile(dirController.getCurrentDir()),
   rn: () => fileOperations.renameFile(dirController.getCurrentDir()),
   cp: () => fileOperations.copyFile(dirController.getCurrentDir()),
-  mv: (args) => console.log("mv path_to_file path_to_new_directory\t|\tMove file"),
+  mv: () => fileOperations.moveFile(dirController.getCurrentDir()),
   rm: (args) => console.log("rm path_to_file\t|\tDelete file"),
   os: {
     EOL: () => getOsInfo('EOL'),
