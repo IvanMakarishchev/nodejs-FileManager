@@ -81,6 +81,14 @@ export class FileOperations {
     }
     await this.copyFile(currentDir).then(() => rm(`${currentDir}\\${fileName}`));
   }
+  async deleteFile(currentDir) {
+    const [fileName] = argController.getArgs();
+    if (!(await isExists(`${currentDir}\\${fileName}`))) {
+      console.log("Target not exists!");
+      return;
+    }
+    await rm(`${currentDir}\\${fileName}`);
+  }
   readStream(path, name) {
     const input = createReadStream(`${path}\\${name}`, { encoding: "utf-8" });
     return new Promise((res, rej) => {
