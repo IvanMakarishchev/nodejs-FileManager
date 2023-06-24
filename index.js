@@ -12,7 +12,7 @@ const startFM = async () => {
     const fullCommand = data.toString().trim().split(" ");
     const [command, ...args] = fullCommand;
     argController.setArgs(args);
-    await runCommand(command).then(() => run.currentDir());
+    await runCommand(command).then(() => runCommand('currentDir'));
   });
   process.on("SIGINT", () => exit());
 };

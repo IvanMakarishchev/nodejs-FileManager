@@ -7,12 +7,12 @@ const dirController = new DirController();
 const fileOperations = new FileOperations();
 
 export const run = {
-  currentDir: async () => console.log(`You are currently in ${dirController.getCurrentDir()}`),
+  currentDir: () => console.log(`You are currently in ${dirController.getCurrentDir()}`),
   up: () => dirController.upDir(),
   cd: () => dirController.changeDir(),
   ls: () => dirController.listDir(),
   cat: () => fileOperations.openFile(dirController.getCurrentDir()),
-  add: (args) => console.log("add new_file_name\t|\tCreate empty file in current working directory"),
+  add: () => fileOperations.createFile(dirController.getCurrentDir()),
   rn: (args) => console.log("rn path_to_file new_filename\t|\tRename file"),
   cp: (args) => console.log("cp path_to_file path_to_new_directory\t|\tCopy file"),
   mv: (args) => console.log("mv path_to_file path_to_new_directory\t|\tMove file"),
