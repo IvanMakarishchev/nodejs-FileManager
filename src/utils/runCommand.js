@@ -9,7 +9,7 @@ export const runCommand = async (command) => {
     ? typeof run[command] === "object"
       ? !args.length
         ? console.log(
-            `${messages.missedArgs()} ${messages.availableArgs(
+            `${messages.missedArgs(1)}\n${messages.availableArgs(
               reducerByType(help[command], (a, b) => a + b)
             )}`
           )

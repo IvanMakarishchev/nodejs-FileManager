@@ -20,14 +20,17 @@ export const help = {
 }
 
 export const messages = {
-  unknownCommand: (command) => `Unknown command: "${command}"\n`,
-  unknownArgs: (wrongArg) => `Unknown argument: "${wrongArg}"!`,
-  missedArgs: () => `Argument missed!`,
-  availableCommand: (commands) => `Available commands: \n${commands}`,
-  availableArgs: (arg) => `Available arguments:\n${arg}`,
-  currentPath: (directoryPath) => `You are currently in ${directoryPath}`,
-  unknownDir: (dirName) => `Unknown directory name ${dirName}`,
-  alreadyInRoot: () => `Cannot go upper, you are in root directory!`,
-  greet: () => `Welcome to the File Manager, ${username}!\n`,
-  bye: () => `Thank you for using File Manager, ${username}, goodbye!\n`
+  unknownCommand: (command) => `\x1b[91mUnknown command: "${command}"\n\x1b[0m`,
+  unknownArgs: (wrongArg) => `\x1b[91mUnknown argument: "${wrongArg}"!\x1b[0m`,
+  missedArgs: (n) => `\x1b[91mArgument missed! Required ${n} more argument(s)!\x1b[0m`,
+  availableCommand: (commands) => `\x1b[93mAvailable commands:\x1b[0m\n${commands}`,
+  availableArgs: (arg) => `\x1b[93mAvailable arguments:\x1b[0m\n${arg}`,
+  currentPath: (directoryPath) => `\x1b[91mYou are currently in ${directoryPath}\x1b[0m`,
+  unknownDir: (dirName) => `\x1b[91mUnknown directory name ${dirName}\x1b[0m`,
+  alreadyInRoot: () => `\x1b[91mCannot go upper, you are in root directory!\x1b[0m`,
+  notExist: (name) => `\x1b[91m${name} not exists!\x1b[0m`,
+  notFile: (name) => `\x1b[91m${name} not a file type!\x1b[0m`,
+  alreadyExist: (name) => `\x1b[91mFile ${name} already exists!\x1b[0m`,
+  greet: () => `\x1b[92mWelcome to the File Manager, ${username}!\n\x1b[0m`,
+  bye: () => `\x1b[92mThank you for using File Manager, ${username}, goodbye!\n\x1b[0m`
 }

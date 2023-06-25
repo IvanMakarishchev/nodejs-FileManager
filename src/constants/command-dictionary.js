@@ -7,7 +7,7 @@ const dirController = new DirController();
 const fileOperations = new FileOperations();
 
 export const run = {
-  currentDir: () => console.log(`You are currently in ${dirController.getCurrentDir()}`),
+  currentDir: () => console.log(`\nYou are currently in ${dirController.getCurrentDir()} >`),
   up: () => dirController.upDir(),
   cd: () => dirController.changeDir(),
   ls: () => dirController.listDir(),

@@ -1,5 +1,5 @@
 import { lstat } from "fs/promises";
-import { join } from "path";
+import { join, format, parse } from "path";
 
 const fileTypes = (file) => ({
   directory: file.isDirectory(),
@@ -11,9 +11,11 @@ const fileTypes = (file) => ({
   "symbolic link": file.isSymbolicLink(),
 });
 
-export const checkFile = async (path, name) => {
-  return await lstat(join(path, name)).then((data) => ({
-    name: name,
+export const checkFile = async (target) => {
+  return await lstat(join(target)).then((data) => 
+  ({
+    name: parse(target).base,
     type: Object.entries(fileTypes(data)).find((el) => el[1])[0],
-  }));
+  })
+  );
 };

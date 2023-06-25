@@ -33,7 +33,7 @@ export class DirController {
   async listDir() {
     await readdir(this.currentDir, { withFileTypes: true }).then(
       async (data) => {
-        let files = data.map((el) => checkFile(this.currentDir, el.name));
+        let files = data.map((el) => checkFile(join(this.currentDir, el.name)));
         await Promise.allSettled(files).then((data) => {
           console.log(data);
           const processedFiles = data.map((el) => el.value);
