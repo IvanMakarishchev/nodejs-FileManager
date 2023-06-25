@@ -1,4 +1,5 @@
 import { lstat } from "fs/promises";
+import { join } from "path";
 
 const fileTypes = (file) => ({
   directory: file.isDirectory(),
@@ -11,7 +12,7 @@ const fileTypes = (file) => ({
 });
 
 export const checkFile = async (path, name) => {
-  return await lstat(`${path}\\${name}`).then((data) => ({
+  return await lstat(join(path, name)).then((data) => ({
     name: name,
     type: Object.entries(fileTypes(data)).find((el) => el[1])[0],
   }));

@@ -5,29 +5,30 @@ import { isExists } from "../utils/isExists.js";
 import { argController } from "../utils/getArgs.js";
 import { calcGradient } from "../utils/calcGradient.js";
 import { checkFile } from "../utils/checkFile.js";
+import { join, dirname } from "path";
 
 export class DirController {
   constructor() {
     this.currentDir = userDir;
   }
   async changeDir() {
-    const [dirName] = argController.getArgs();
-    if (!(await isExists(`${this.currentDir}\\${dirName}`))) {
-      console.log(messages.unknownDir(dirName));
+    const [target] = argController.getArgs();
+    if (!(await isExists(join(this.currentDir, target)))) {
+      console.log(messages.unknownDir(target));
       return;
     }
-    if (!(await stat(`${this.currentDir}\\${dirName}`)).isDirectory()) {
-      console.log(messages.unknownDir(dirName));
+    if (!(await stat(join(this.currentDir, target))).isDirectory()) {
+      console.log(messages.unknownDir(target));
       return;
     }
-    this.currentDir = `${this.currentDir}\\${dirName}`;
+    this.currentDir = join(this.currentDir, target);
   }
   upDir() {
     if (this.currentDir === userDir) {
       console.log(messages.alreadyInRoot());
       return;
     }
-    this.currentDir = this.currentDir.split("\\").slice(0, -1).join("\\");
+    this.currentDir = dirname(this.currentDir);
   }
   async listDir() {
     await readdir(this.currentDir, { withFileTypes: true }).then(
