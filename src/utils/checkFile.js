@@ -1,20 +1,18 @@
 import { lstat } from "fs/promises";
 
+const fileTypes = (file) => ({
+  directory: file.isDirectory(),
+  file: file.isFile(),
+  "block device": file.isBlockDevice(),
+  "char device": file.isCharacterDevice(),
+  fifo: file.isFIFO(),
+  socket: file.isSocket(),
+  "symbolic link": file.isSymbolicLink(),
+});
+
 export const checkFile = async (path, name) => {
   return await lstat(`${path}\\${name}`).then((data) => ({
     name: name,
-    type: data.isDirectory()
-      ? "directory"
-      : data.isFile()
-      ? "file"
-      : data.isBlockDevice()
-      ? "block device"
-      : data.isCharacterDevice()
-      ? "char device"
-      : data.isFIFO()
-      ? "fifo"
-      : data.isSocket()
-      ? "socket"
-      : "symbolic link",
+    type: Object.entries(fileTypes(data)).find((el) => el[1])[0],
   }));
 };
