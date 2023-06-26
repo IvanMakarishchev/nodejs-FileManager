@@ -13,9 +13,10 @@ export const runCommand = async (command) => {
               reducerByType(help[command], (a, b) => a + b)
             )}`
           )
-        : !args[0].startsWith("--")
+        : !args[0].startsWith("--") ||
+          !Object.keys(run[command]).includes(args[0].replace("--", ""))
         ? console.log(
-            `${messages.unknownArgs(args[0])} ${messages.availableArgs(
+            `${messages.unknownArgs(args[0])}\n${messages.availableArgs(
               reducerByType(help[command], (a, b) => a + b)
             )}`
           )

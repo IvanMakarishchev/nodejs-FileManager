@@ -4,7 +4,6 @@ class Args {
   }
   setArgs(arg) {
     this.arguments = arg;
-    console.log("Arguments setted: " + this.arguments);
   }
   getArgs() {
     return this.arguments;

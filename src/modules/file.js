@@ -3,7 +3,7 @@ import { createReadStream, createWriteStream } from "fs";
 import { writeFile, rename, mkdir, rm } from "fs/promises";
 import { createHash } from "crypto";
 import { createBrotliCompress, createBrotliDecompress } from "zlib";
-import { join } from "path";
+import { join, parse } from "path";
 import {
   checkTarget,
   enoughArgs,
@@ -14,6 +14,18 @@ import {
 
 export class FileOperations {
   constructor() {}
+
+  setCopyName = async (filePath) => {
+    if (!(await checkTarget(filePath))) {
+      return this.setCopyName(
+        join(
+          `${parse(filePath).dir}`,
+          `${parse(filePath).name}-copy${parse(filePath).ext}`
+        )
+      );
+    }
+    return filePath;
+  };
 
   async openFile(currentDir) {
     const [fileName] = argController.getArgs();
@@ -37,8 +49,10 @@ export class FileOperations {
     if (!(await enoughArgs(oldName, newName))) return;
     const source = join(currentDir, oldName);
     const target = join(currentDir, newName);
-    if ((await targetExists(source)) && (await targetNotExists(target)))
-      await rename(source, target);
+    if (await targetExists(source))
+      await this.setCopyName(target).then(async (data) => {
+        await rename(source, data);
+      });
   }
 
   async copyFile(currentDir) {
@@ -46,13 +60,13 @@ export class FileOperations {
     if (!(await enoughArgs(fileName, destinationDir))) return;
     const source = join(currentDir, fileName);
     const target = join(currentDir, destinationDir, fileName);
-    if ((await targetExists(source)) && (await targetNotExists(target))) {
+    if (await targetExists(source)) {
       if (await checkTarget(join(currentDir, destinationDir))) {
         await mkdir(join(currentDir, destinationDir));
       }
-      createReadStream(join(currentDir, fileName)).pipe(
-        createWriteStream(join(currentDir, destinationDir, fileName))
-      );
+      await this.setCopyName(target).then((data) => {
+        createReadStream(source).pipe(createWriteStream(data));
+      });
     }
   }
 
@@ -61,7 +75,7 @@ export class FileOperations {
     if (!(await enoughArgs(fileName, destinationDir))) return;
     const source = join(currentDir, fileName);
     const target = join(currentDir, destinationDir, fileName);
-    if ((await targetExists(source)) && (await targetNotExists(target)))
+    if (await targetExists(source))
       await this.copyFile(currentDir).then(() => this.deleteFile(currentDir));
   }
 
