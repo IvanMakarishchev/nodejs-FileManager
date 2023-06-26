@@ -1,23 +1,32 @@
-import { run } from "./src/constants/command-dictionary.js";
-import { messages, help } from "./src/constants/messages.js";
+import { userDir } from "./src/constants/environment.js";
+import { messages } from "./src/constants/messages.js";
 import { exit } from "./src/modules/exit.js";
-import { reducerByType } from "./src/utils/reducerByType.js";
+import { argController } from "./src/utils/getArgs.js";
+import { runCommand } from "./src/utils/runCommand.js";
 
 const startFM = async () => {
+  console.log("home directory: ", userDir);
   console.log(`${messages.greet()}`);
-  process.stdin.on("data", (data) => {
-    const fullCommand = data.toString().trim().split(' ');
-    const command = fullCommand[0];
-    const args = fullCommand.splice(1);
-    Object.keys(run).includes(command)
-      ? run[command](args)
-      : console.log(
-          `${messages.unknownCommand(command)}${messages.availableCommand(
-            reducerByType(Object.entries(help), (a, b) => a + b)
-          )}`
-        );
+  process.stdin.on("data", async (data) => {
+    const fullCommand = data.toString().trim();
+    let processedCmd = fullCommand.split(" ").join(",");
+    if (fullCommand.includes('"')) {
+      const spaceCmd = Array.from(
+        fullCommand.matchAll(/"[^"]*"/g),
+        (m) => m[0]
+      );
+      Array.from(
+        fullCommand.replaceAll(" ", ",").matchAll(/"[^"]*"/g),
+        (m) => m[0]
+      ).forEach(
+        (el, i) => (processedCmd = processedCmd.replace(el, spaceCmd[i]))
+      );
+    }
+    const [command, ...args] = processedCmd.replaceAll('"', "").split(",");
+    argController.setArgs(args);
+    await runCommand(command).then(() => runCommand("currentDir"));
   });
-  process.on('SIGINT', () => exit());
+  process.on("SIGINT", () => exit());
 };
 
 await startFM();
