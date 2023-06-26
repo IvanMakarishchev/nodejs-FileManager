@@ -35,7 +35,6 @@ export class DirController {
       async (data) => {
         let files = data.map((el) => checkFile(join(this.currentDir, el.name)));
         await Promise.allSettled(files).then((data) => {
-          console.log(data);
           const processedFiles = data.map((el) => el.value);
           const maxFileLength = Math.max(
             ...processedFiles.map((el) => el.name.length)
