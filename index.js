@@ -5,8 +5,8 @@ import { argController } from "./src/utils/getArgs.js";
 import { runCommand } from "./src/utils/runCommand.js";
 
 const startFM = async () => {
-  console.log("home directory: ", userDir);
   console.log(`${messages.greet()}`);
+  console.log(messages.currentPath(userDir));
   process.stdin.on("data", async (data) => {
     const fullCommand = data.toString().trim();
     let processedCmd = fullCommand.split(" ").join(",");
