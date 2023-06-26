@@ -90,6 +90,8 @@ export class FileOperations {
     const source = join(currentDir, fileName);
     const target = join(join(currentDir, destinationDir, fileName) + `.br`);
     if ((await targetExists(source)) && (await targetNotExists(target)))
+    console.log(source);
+    console.log(target);
       createReadStream(source, { encoding: "utf-8" })
         .pipe(createBrotliCompress())
         .pipe(createWriteStream(target));
