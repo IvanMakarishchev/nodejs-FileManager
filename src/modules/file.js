@@ -19,7 +19,6 @@ export class FileOperations {
     const [fileName] = argController.getArgs();
     if (!(await enoughArgs(fileName))) return;
     const target = join(currentDir, fileName);
-    console.log("QWERTY");
     if ((await targetExists(target)) && (await isSuitableType(target))) {
       console.log(await this.createStream(target));
     }
@@ -89,12 +88,14 @@ export class FileOperations {
     if (!(await enoughArgs(fileName, destinationDir))) return;
     const source = join(currentDir, fileName);
     const target = join(join(currentDir, destinationDir, fileName) + `.br`);
-    if ((await targetExists(source)) && (await targetNotExists(target)))
-    console.log(source);
-    console.log(target);
+    if ((await targetExists(source)) && (await targetNotExists(target))) {
+      if (await checkTarget(join(currentDir, destinationDir))) {
+        await mkdir(join(currentDir, destinationDir));
+      }
       createReadStream(source, { encoding: "utf-8" })
         .pipe(createBrotliCompress())
         .pipe(createWriteStream(target));
+    }
   }
 
   async decompress(currentDir) {
@@ -102,10 +103,14 @@ export class FileOperations {
     if (!(await enoughArgs(fileName, destinationDir))) return;
     const source = join(currentDir, fileName);
     const target = join(currentDir, destinationDir, fileName).slice(0, -3);
-    if ((await targetExists(source)) && (await targetNotExists(target)))
+    if ((await targetExists(source)) && (await targetNotExists(target))) {
+      if (await checkTarget(join(currentDir, destinationDir))) {
+        await mkdir(join(currentDir, destinationDir));
+      }
       createReadStream(source)
         .pipe(createBrotliDecompress())
         .pipe(createWriteStream(target));
+    }
   }
 
   createStream(path) {
